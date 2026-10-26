@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Unusual Activity Detection
+    </title>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: #f3f4f6;
+
+    color: #111827;
+
+}
+
+
+.header {
+
+    background: #111827;
+
+    color: white;
+
+    padding: 20px 25px;
+
+}
+
+
+.header h1 {
+
+    margin: 0;
+
+    font-size: 25px;
+
+}
+
+
+.header p {
+
+    margin: 7px 0 0;
+
+    color: #d1d5db;
+
+}
+
+
+.container {
+
+    width: 96%;
+
+    max-width: 1400px;
+
+    margin: 20px auto;
+
+}
+
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        0.9fr;
+
+    gap: 20px;
+
+}
+
+
+.card {
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 3px 14px
+        rgba(0,0,0,0.08);
+
+}
+
+
+.card h2 {
+
+    margin-top: 0;
+
+}
+
+
+#liveVideo {
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    background: #111;
+
+    border-radius: 12px;
+
+    object-fit: contain;
+
+}
+
+
+.status-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 15px;
+
+    font-weight: bold;
+
+}
+
+
+.dot {
+
+    width: 12px;
+
+    height: 12px;
+
+    border-radius: 50%;
+
+    background: #9ca3af;
+
+}
+
+
+.dot.online {
+
+    background: #16a34a;
+
+}
+
+
+.dot.offline {
+
+    background: #dc2626;
+
+}
+
+
+.activity {
+
+    font-size: 29px;
+
+    font-weight: bold;
+
+    margin: 10px 0 20px;
+
+}
+
+
+.row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 11px 0;
+
+    border-bottom:
+        1px solid #e5e7eb;
+
+}
+
+
+.label {
+
+    color: #6b7280;
+
+}
+
+
+.value {
+
+    font-weight: bold;
+
+}
+
+
+.risk-box {
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    background: #f9fafb;
+
+    border-radius: 12px;
+
+}
+
+
+.risk-number {
+
+    font-size: 35px;
+
+    font-weight: bold;
+
+    margin-top: 5px;
+
+}
+
+
+.risk-scale {
+
+    position: relative;
+
+    height: 12px;
+
+    margin-top: 12px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22c55e,
+            #eab308,
+            #ef4444
+        );
+
+}
+
+
+.risk-marker {
+
+    position: absolute;
+
+    top: -4px;
+
+    width: 4px;
+
+    height: 20px;
+
+    background: #111827;
+
+}
+
+
+.history {
+
+    margin-top: 20px;
+
+}
+
+
+.button {
+
+    border: none;
+
+    padding: 10px 15px;
+
+    background: #dc2626;
+
+    color: white;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.alert {
+
+    border: 1px solid #e5e7eb;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    margin-bottom: 10px;
+
+    background: #fafafa;
+
+}
+
+
+.alert-title {
+
+    font-weight: bold;
+
+    margin-bottom: 5px;
+
+}
+
+
+.alert-meta {
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+}
+
+
+.evidence {
+
+    width: 180px;
+
+    max-width: 100%;
+
+    margin-top: 8px;
+
+    border-radius: 8px;
+
+}
+
+
+.empty {
+
+    color: #6b7280;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>
+        Unusual Activity Detection Using Camera by AI
+    </h1>
+
+    <p>
+        Laptop Admin Panel — Mobile Camera → R3D-18 AI
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+<div class="grid">
+
+
+<!-- =====================================================
+     MOBILE LIVE VIDEO
+     ===================================================== -->
+
+<div class="card">
+
+    <h2>
+        Live Mobile Camera
+    </h2>
+
+
+    <div class="status-row">
+
+        <span
+            id="statusDot"
+            class="dot"
+        ></span>
+
+        <span id="mobileStatus">
+            Mobile Offline
+        </span>
+
+    </div>
+
+
+    <img
+        id="liveVideo"
+        src="/video_feed"
+        alt="Mobile live video"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     AI STATUS
+     ===================================================== -->
+
+<div class="card">
+
+    <h2>
+        Current AI Detection
+    </h2>
+
+
+    <div
+        id="activity"
+        class="activity"
+    >
+        Waiting for mobile
+    </div>
+
+
+    <div class="row">
+
+        <span class="label">
+            Status
+        </span>
+
+        <span
+            id="status"
+            class="value"
+        >
+            WAITING
+        </span>
+
+    </div>
+
+
+    <div class="row">
+
+        <span class="label">
+            Confidence
+        </span>
+
+        <span
+            id="confidence"
+            class="value"
+        >
+            0%
+        </span>
+
+    </div>
+
+
+    <div class="row">
+
+        <span class="label">
+            Temporal Frames
+        </span>
+
+        <span
+            id="temporal"
+            class="value"
+        >
+            0 / 8
+        </span>
+
+    </div>
+
+
+    <div class="row">
+
+        <span class="label">
+            Message
+        </span>
+
+        <span
+            id="message"
+            class="value"
+        >
+            Waiting for mobile camera.
+        </span>
+
+    </div>
+
+
+    <div class="risk-box">
+
+        <div class="label">
+            Risk Level
+        </div>
+
+
+        <div
+            id="risk"
+            class="risk-number"
+        >
+            0.0 / 10
+        </div>
+
+
+        <div id="riskStage">
+            Waiting
+        </div>
+
+
+        <div class="risk-scale">
+
+            <div
+                id="riskMarker"
+                class="risk-marker"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     ALERT HISTORY
+     ===================================================== -->
+
+<div class="card history">
+
+    <div
+        style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        "
+    >
+
+        <h2>
+            Alert History
+        </h2>
+
+
+        <button
+            class="button"
+            onclick="clearHistory()"
+        >
+            Clear History
+        </button>
+
+    </div>
+
+
+    <div id="alerts">
+
+        <div class="empty">
+            No alerts yet.
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+function setText(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+    if (element) {
+
+        element.textContent =
+            value;
+
+    }
+
+}
+
+
+function updateMobileStatus(
+    connected
+) {
+
+    const dot =
+        document.getElementById(
+            "statusDot"
+        );
+
+    const status =
+        document.getElementById(
+            "mobileStatus"
+        );
+
+
+    if (connected) {
+
+        dot.className =
+            "dot online";
+
+        status.textContent =
+            "Mobile Connected";
+
+    } else {
+
+        dot.className =
+            "dot offline";
+
+        status.textContent =
+            "Mobile Offline";
+
+    }
+
+}
+
+
+function updateState(
+    data
+) {
+
+    updateMobileStatus(
+        Boolean(
+            data.mobile_connected
+        )
+    );
+
+
+    setText(
+        "activity",
+        data.activity ||
+        "Analyzing Scene"
+    );
+
+
+    setText(
+        "status",
+        data.status ||
+        "ANALYZING"
+    );
+
+
+    let confidence =
+        Number(
+            data.confidence ||
+            0
+        );
+
+
+    if (confidence <= 1) {
+
+        confidence *= 100;
+
+    }
+
+
+    setText(
+        "confidence",
+        confidence.toFixed(1)
+        + "%"
+    );
+
+
+    const current =
+        Number(
+            data.confirmation_progress ||
+            0
+        );
+
+
+    const required =
+        Number(
+            data.temporal_required ||
+            8
+        );
+
+
+    setText(
+        "temporal",
+        current
+        + " / "
+        + required
+    );
+
+
+    setText(
+        "message",
+        data.message ||
+        "Monitoring..."
+    );
+
+
+    const risk =
+        Number(
+            data.risk ||
+            0
+        );
+
+
+    setText(
+        "risk",
+        risk.toFixed(1)
+        + " / 10"
+    );
+
+
+    setText(
+        "riskStage",
+        data.risk_stage ||
+        "Waiting"
+    );
+
+
+    document
+        .getElementById(
+            "riskMarker"
+        )
+        .style.left =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    risk * 10
+                )
+            )
+            + "%";
+
+}
+
+
+async function loadState() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/latest-state",
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        updateState(
+            data
+        );
+
+
+    } catch (error) {
+
+        updateMobileStatus(
+            false
+        );
+
+    }
+
+}
+
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+
+}
+
+
+async function loadAlerts() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/alerts",
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        const alerts =
+            Array.isArray(
+                data.alerts
+            )
+            ? data.alerts
+            : [];
+
+
+        const container =
+            document.getElementById(
+                "alerts"
+            );
+
+
+        if (
+            alerts.length === 0
+        ) {
+
+            container.innerHTML =
+                `
+                <div class="empty">
+                    No alerts yet.
+                </div>
+                `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            alerts
+            .map(
+                alert => {
+
+                    const activity =
+                        alert.display_name ||
+                        alert.activity ||
+                        "Abnormal activity";
+
+
+                    const confidence =
+                        Number(
+                            alert.confidence ||
+                            0
+                        );
+
+
+                    const risk =
+                        Number(
+                            alert.risk ||
+                            0
+                        );
+
+
+                    let evidence =
+                        "";
+
+
+                    if (
+                        alert.evidence_url
+                    ) {
+
+                        evidence =
+                            `
+                            <img
+                                class="evidence"
+                                src="${escapeHtml(
+                                    alert.evidence_url
+                                )}"
+                                alt="Evidence"
+                            >
+                            `;
+
+                    }
+
+
+                    return `
+
+                    <div class="alert">
+
+                        <div class="alert-title">
+                            ${escapeHtml(
+                                activity
+                            )}
+                        </div>
+
+                        <div class="alert-meta">
+
+                            Time:
+                            ${escapeHtml(
+                                alert.created_at ||
+                                "-"
+                            )}
+
+                            <br>
+
+                            Confidence:
+                            ${confidence.toFixed(1)}%
+
+                            <br>
+
+                            Risk:
+                            ${risk.toFixed(1)} / 10
+
+                            <br>
+
+                            Event ID:
+                            ${escapeHtml(
+                                alert.event_id ||
+                                "-"
+                            )}
+
+                        </div>
+
+                        ${evidence}
+
+                    </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+async function clearHistory() {
+
+    try {
+
+        await fetch(
+            "/api/alerts/clear",
+            {
+                method:
+                    "POST"
+            }
+        );
+
+
+        await loadAlerts();
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+setInterval(
+    loadState,
+    500
+);
+
+
+setInterval(
+    loadAlerts,
+    2000
+);
+
+
+loadState();
+
+loadAlerts();
+
+</script>
+
+
+</body>
+
+</html>

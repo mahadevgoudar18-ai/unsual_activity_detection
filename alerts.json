@@ -1,0 +1,104 @@
+[
+    {
+        "id": "EVENT-20261005-132648-9988",
+        "event_id": "EVENT-20261005-132648-9988",
+        "activity": "Theft",
+        "activity_code": "theft",
+        "confidence": 70.8,
+        "anomaly_score": 70.8,
+        "status": "CONFIRMED",
+        "time": "01:26:49 PM",
+        "date": "2026-10-05",
+        "message": "Confirmed Theft detected (70.8% confidence).",
+        "evidence": "/evidence/theft_EVENT-20261005-132648-9988.jpg",
+        "location": {
+            "source": "mobile_camera",
+            "device": "phone"
+        }
+    },
+    {
+        "id": "EVENT-20261005-132854-7489",
+        "event_id": "EVENT-20261005-132854-7489",
+        "activity": "Fire / Smoke",
+        "activity_code": "fire_smoke",
+        "confidence": 72.9,
+        "anomaly_score": 72.9,
+        "status": "CONFIRMED",
+        "time": "01:28:54 PM",
+        "date": "2026-10-05",
+        "message": "Confirmed Fire / Smoke detected (72.9% confidence).",
+        "evidence": "/evidence/fire_smoke_EVENT-20261005-132854-7489.jpg",
+        "location": {
+            "source": "mobile_camera",
+            "device": "phone"
+        }
+    },
+    {
+        "id": "EVENT-20261005-132941-5E47",
+        "event_id": "EVENT-20261005-132941-5E47",
+        "activity": "Theft",
+        "activity_code": "theft",
+        "confidence": 68.8,
+        "anomaly_score": 68.8,
+        "status": "CONFIRMED",
+        "time": "01:29:41 PM",
+        "date": "2026-10-05",
+        "message": "Confirmed Theft detected (68.8% confidence).",
+        "evidence": "/evidence/theft_EVENT-20261005-132941-5E47.jpg",
+        "location": {
+            "source": "mobile_camera",
+            "device": "phone"
+        }
+    },
+    {
+        "id": "EVENT-20261005-133339-B77A",
+        "event_id": "EVENT-20261005-133339-B77A",
+        "activity": "Fire / Smoke",
+        "activity_code": "fire_smoke",
+        "confidence": 68.0,
+        "anomaly_score": 68.0,
+        "status": "CONFIRMED",
+        "time": "01:33:39 PM",
+        "date": "2026-10-05",
+        "message": "Confirmed Fire / Smoke detected (68.0% confidence).",
+        "evidence": "/evidence/fire_smoke_EVENT-20261005-133339-B77A.jpg",
+        "location": {
+            "source": "mobile_camera",
+            "device": "phone"
+        }
+    },
+    {
+        "id": "EVENT-20261005-133358-3FF5",
+        "event_id": "EVENT-20261005-133358-3FF5",
+        "activity": "Fire / Smoke",
+        "activity_code": "fire_smoke",
+        "confidence": 60.3,
+        "anomaly_score": 60.3,
+        "status": "CONFIRMED",
+        "time": "01:33:58 PM",
+        "date": "2026-10-05",
+        "message": "Confirmed Fire / Smoke detected (60.3% confidence).",
+        "evidence": "/evidence/fire_smoke_EVENT-20261005-133358-3FF5.jpg",
+        "location": {
+            "source": "mobile_camera",
+            "device": "phone"
+        }
+    },
+    {
+        "id": "EVENT-20261026-163954-34F6",
+        "event_id": "EVENT-20261026-163954-34F6",
+        "activity": "Fire / Smoke",
+        "activity_code": "fire_smoke",
+        "confidence": 65.0,
+        "anomaly_score": 65.0,
+        "status": "CONFIRMED",
+        "time": "04:39:54 PM",
+        "date": "2026-10-26",
+        "message": "Confirmed Fire / Smoke detected (65.0% confidence).",
+        "evidence": "/evidence/fire_smoke_EVENT-20261026-163954-34F6.jpg",
+        "location": {
+            "source": "mobile_camera",
+            "device": "phone"
+        }
+    }
+]

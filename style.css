@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f4f7;
+}
+
+header {
+    background: #1f2937;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    gap: 30px;
+    padding: 30px;
+}
+
+.camera-section,
+.status-section {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+}
+
+.camera-box {
+    background: black;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.camera-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.status {
+    padding: 15px;
+    margin-top: 20px;
+    background: #e8f5e9;
+}
+
+.green {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: green;
+    border-radius: 50%;
+}
+
+.info {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.alerts {
+    background: white;
+    margin: 0 30px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.alert {
+    color: red;
+    font-weight: bold;
+}
+
+.normal {
+    color: green;
+    font-weight: bold;
+}

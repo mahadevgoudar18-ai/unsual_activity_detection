@@ -1,0 +1,66 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Environment variables & secrets (CRITICAL: Do not commit credentials)
+.env
+*.env
+.env.*
+!.env.example
+*.pem
+*-key.pem
+Gmail_API_Private/
+
+# OS specific files
+desktop.ini
+Thumbs.db
+ehthumbs.db
+.DS_Store
+
+# IDE and Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Large files (>100MB rejected by GitHub) & weights
+*.zip
+*.tar
+*.tar.gz
+*.pth
+temporal_model.pth
+models/
+archive*.zip
+
+# Datasets
+datasets/
+activity_dataset/
+activity_dataset_*/
+additional_dataset/
+continuation_dataset/
+new_focus_dataset/
+final_finetune_dataset/
+
+# Training runs & checkpoints
+runs/
+continued_training/
+final_training/
+
+# Runtime evidence & logs
+evidence/
+*.log
+
+# Executables
+*.exe

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Mobile Camera</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+
+            margin: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            background: black;
+
+            overflow: hidden;
+
+            font-family: Arial, sans-serif;
+
+        }
+
+        #camera {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+        }
+
+        #canvas {
+
+            display: none;
+
+        }
+
+        #status {
+
+            position: fixed;
+
+            left: 12px;
+
+            right: 12px;
+
+            bottom: 15px;
+
+            padding: 12px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(0, 0, 0, 0.65);
+
+            color: white;
+
+            text-align: center;
+
+            font-size: 14px;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- PHONE CAMERA ONLY -->
+
+    <video
+        id="camera"
+        autoplay
+        playsinline
+        muted
+    ></video>
+
+
+    <canvas id="canvas"></canvas>
+
+
+    <div id="status">
+        Starting camera...
+    </div>
+
+
+<script>
+
+const video =
+    document.getElementById(
+        "camera"
+    );
+
+const canvas =
+    document.getElementById(
+        "canvas"
+    );
+
+const statusBox =
+    document.getElementById(
+        "status"
+    );
+
+
+let stream = null;
+
+let sending = false;
+
+let stopped = false;
+
+
+const SEND_INTERVAL = 100;
+
+
+function setStatus(text) {
+
+    statusBox.textContent = text;
+
+}
+
+
+async function startCamera() {
+
+    try {
+
+        setStatus(
+            "Requesting camera permission..."
+        );
+
+
+        stream =
+            await navigator
+                .mediaDevices
+                .getUserMedia({
+
+                    video: {
+
+                        facingMode: {
+                            ideal:
+                                "environment"
+                        },
+
+                        width: {
+                            ideal: 1280
+                        },
+
+                        height: {
+                            ideal: 720
+                        }
+
+                    },
+
+                    audio: false
+
+                });
+
+
+        video.srcObject =
+            stream;
+
+
+        await video.play();
+
+
+        setStatus(
+            "Camera connected. Sending video to laptop."
+        );
+
+
+        sendFrames();
+
+        sendLocation();
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        setStatus(
+            "Camera permission failed. Allow camera access and reload."
+        );
+
+    }
+
+}
+
+
+async function sendFrames() {
+
+    if (stopped) {
+        return;
+    }
+
+
+    if (
+
+        video.readyState >= 2 &&
+
+        video.videoWidth > 0 &&
+
+        video.videoHeight > 0 &&
+
+        !sending
+
+    ) {
+
+        sending = true;
+
+
+        try {
+
+            canvas.width =
+                video.videoWidth;
+
+            canvas.height =
+                video.videoHeight;
+
+
+            const context =
+                canvas.getContext(
+                    "2d"
+                );
+
+
+            context.drawImage(
+
+                video,
+
+                0,
+
+                0,
+
+                canvas.width,
+
+                canvas.height
+
+            );
+
+
+            const blob =
+                await new Promise(
+                    resolve => {
+
+                        canvas.toBlob(
+
+                            resolve,
+
+                            "image/jpeg",
+
+                            0.72
+
+                        );
+
+                    }
+                );
+
+
+            if (blob) {
+
+                await fetch(
+
+                    "/api/frame",
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "image/jpeg"
+
+                        },
+
+                        body:
+                            blob
+
+                    }
+
+                );
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            setStatus(
+                "Laptop connection problem..."
+            );
+
+
+        } finally {
+
+            sending = false;
+
+        }
+
+    }
+
+
+    setTimeout(
+        sendFrames,
+        SEND_INTERVAL
+    );
+
+}
+
+
+function sendLocation() {
+
+    if (
+        !navigator.geolocation
+    ) {
+        return;
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        async position => {
+
+            try {
+
+                await fetch(
+
+                    "/api/location",
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                latitude:
+                                    position.coords.latitude,
+
+                                longitude:
+                                    position.coords.longitude,
+
+                                accuracy:
+                                    position.coords.accuracy
+
+                            })
+
+                    }
+
+                );
+
+            } catch (error) {
+
+                console.log(
+                    "Location unavailable"
+                );
+
+            }
+
+        },
+
+        () => {},
+
+        {
+
+            enableHighAccuracy:
+                false,
+
+            timeout:
+                5000,
+
+            maximumAge:
+                30000
+
+        }
+
+    );
+
+}
+
+
+window.addEventListener(
+
+    "beforeunload",
+
+    () => {
+
+        stopped = true;
+
+
+        if (stream) {
+
+            stream
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+
+        }
+
+    }
+
+);
+
+
+startCamera();
+
+</script>
+
+</body>
+
+</html>
